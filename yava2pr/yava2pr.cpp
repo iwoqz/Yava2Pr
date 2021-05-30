@@ -1,20 +1,27 @@
-﻿#define _CRT_SECURE_NO_WARNINGS
+#define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
 #include <sstream>
 #include <string>
+#include <cstring>
 #pragma warning(disable : 4996)
 
 using namespace std;
 
 class String {
-public:
+private:
+	static int k;
+protected:
 	char* string;
 	int length;
 
+public:
 	String() {
-		string = NULL;
 		length = 0;
+		string = new char[length + 1];
+		string[0] = ' ';
+		string[1] = '\0';
 		cout << "Сработал конструктор без параметров класса String" << endl;
+		getchar();
 	}
 
 	String(char* fstring) {
@@ -33,6 +40,8 @@ public:
 	}
 
 	~String() {
+		if(string)
+			delete[] string;
 		cout << "Сработал деструктор класса String" << endl;
 	}
 
@@ -79,6 +88,8 @@ public:
 };
 
 class StringId :public String {
+private:
+	static int k;
 public:
 	StringId() {
 		String();
@@ -109,17 +120,34 @@ public:
 		cout << "Сработал деструктор класса StringId" << endl;
 	}
 
+	int isIdent(const char* str) {
+		int n;
+		if ((str[0] < 'A') || ((str[0] > 'Z') && (str[0] < 'a') && (str[0] != '_')) || (str[0] > 'z'))
+			n = 0;
+		else
+			n = strlen(str);
+		for (int i = 1; i < n; i++) {
+			if ((str[i] < '0') || ((str[i] > '9') && (str[i] < 'A')) || ((str[i] > 'Z') && (str[i] < 'a') && (str[i] != '_')) || (str[i] > 'z'))
+				n = 0;
+		}
+		return n;
+	}
+
 	StringId& operator= (StringId& sstring) {
+		string = new char[sizeof sstring];
 		strcpy_s(this->getString(), 100, sstring.getString());
 		this->setLength(sstring.getLength());
 		return *this;
 	}
 
-	StringId& operator< (StringId& sstring) {
-		strcat_s(this->getString(), 100, sstring.getString());
-		this->setLength(sstring.getLength());
-		cout << this->getString() << endl;
-		return *this;
+	/*int strcmp(const char* str1, const char* str2) {
+		string = new char[sizeof str1];
+		string = new char[sizeof str2];
+		int k = strcmp(str1, str2);
+		cout << k;
+	}*/
+	bool operator< (const StringId& sstring	) {
+		return (this->string) < (sstring.string);
 	}
 
 
@@ -128,6 +156,7 @@ public:
 class Complex :public String {
 private:
 	int real, image;
+	static int k;
 	
 public:
 	Complex() {
