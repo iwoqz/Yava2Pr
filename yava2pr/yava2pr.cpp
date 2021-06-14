@@ -4,6 +4,7 @@
 #include <string>
 #include <cstring>
 #pragma warning(disable : 4996)
+#pragma warning(disable : 4703)
 
 using namespace std;
 
@@ -45,9 +46,15 @@ public:
 		cout << "Сработал деструктор класса String" << endl;
 	}
 
-	String& operator= (String& fstring) {
-		strcpy_s(string, 100, fstring.string);
-		length = fstring.length;
+	String& operator= (const String& other)
+	{
+		if (this->string != nullptr)
+			delete[] string;
+		length = strlen(other.string);
+		this->string = new char[length + 1];
+		for (int i = 0; i < length; i++)
+			this->string[i] = other.string[i];
+		this->string[length] = '\0';
 		return *this;
 	}
 
@@ -133,24 +140,37 @@ public:
 		return n;
 	}
 
-	StringId& operator= (StringId& sstring) {
-		string = new char[sizeof sstring];
-		strcpy_s(this->getString(), 100, sstring.getString());
-		this->setLength(sstring.getLength());
+	StringId& operator= (const StringId& sstring) {
+		if (this->string != nullptr)
+			delete[] string;
+		length = strlen(sstring.string);
+		this->string = new char[length+ 1];
+		for (int i = 0; i < length; i++)
+			this->string[i] = sstring.string[i];
+		this->string[length] = '\0';
 		return *this;
 	}
 
-	/*int strcmp(const char* str1, const char* str2) {
-		string = new char[sizeof str1];
-		string = new char[sizeof str2];
-		int k = strcmp(str1, str2);
-		cout << k;
-	}*/
-	bool operator< (const StringId& sstring	) {
-		return (this->string) < (sstring.string);
+	StringId& operator< (const StringId& sstring) {
+		system("CLS");
+		int k = strlen(this->string);
+		int k1 = strlen(sstring.string);
+		if (k == k1) {
+			cout << "Строки равны";
+			system("pause");
+		}
+		else
+			if (k < k1) {
+				cout << "Строка 1 меньше строки 2";
+				system("pause");
+			}
+			else {
+				cout << "Строка 2 меньше строки 1";
+				system("pause");
+			}
+		return *this;
+		system("pause");
 	}
-
-
 };
 
 class Complex :public String {
@@ -234,11 +254,14 @@ public:
 		cout << "Сработал деструктор класса Complex" << endl;
 	}
 
-	Complex& operator= (Complex& tstring) {
-		strcpy_s(this->getString(), 100, tstring.getString());
-		this->setLength(tstring.getLength());
-		real = tstring.real;
-		image = tstring.image;
+	Complex& operator= (const Complex& tstring) {
+		if (this->string != nullptr)
+			delete[] string;
+		length = strlen(tstring.string);
+		this->string = new char[length + 1];
+		for (int i = 0; i < length; i++)
+			this->string[i] = tstring.string[i];
+		this->string[length] = '\0';
 		return *this;
 	}
 
@@ -277,6 +300,7 @@ public:
 };
 
 int main() {
+	setlocale(LC_ALL, "Rus");
 	char menu = 0;
 	int n = 0, i = 0, k1 =0,  k2 = 0;
 	String** strings;
