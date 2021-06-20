@@ -12,9 +12,22 @@ class String {
 private:
 	static int k;
 protected:
+	void setString(char* fstring) {
+		if (fstring == NULL) {
+			cout << "Пустая строка" << endl;
+			fstring = new char;
+			fstring[0] = '\0';
+		}
+		else
+			this->string = fstring;
+	}
+
+	void setLength(int flength) {
+		this->length = flength;
+	}
+
 	char* string;
 	int length;
-
 public:
 	String() {
 		length = 0;
@@ -62,16 +75,8 @@ public:
 		return string;
 	}
 
-	void setString(char* fstring) {
-		string = fstring;
-	}
-
 	int getLength() {
 		return length;
-	}
-
-	void setLength(int flength) {
-		length = flength;
 	}
 
 	ostream& operator<<(ostream& out) {
@@ -88,8 +93,8 @@ public:
 		return in;
 	}
 
-	String& operator[] (const int index) {
-		return this[index];
+	char &operator[] (const int index) {
+		return string[index];
 	}
 
 };
@@ -127,19 +132,6 @@ public:
 		cout << "Сработал деструктор класса StringId" << endl;
 	}
 
-	int isIdent(const char* str) {
-		int n;
-		if ((str[0] < 'A') || ((str[0] > 'Z') && (str[0] < 'a') && (str[0] != '_')) || (str[0] > 'z'))
-			n = 0;
-		else
-			n = strlen(str);
-		for (int i = 1; i < n; i++) {
-			if ((str[i] < '0') || ((str[i] > '9') && (str[i] < 'A')) || ((str[i] > 'Z') && (str[i] < 'a') && (str[i] != '_')) || (str[i] > 'z'))
-				n = 0;
-		}
-		return n;
-	}
-
 	StringId& operator= (const StringId& sstring) {
 		if (this->string != nullptr)
 			delete[] string;
@@ -151,25 +143,11 @@ public:
 		return *this;
 	}
 
-	StringId& operator< (const StringId& sstring) {
-		system("CLS");
-		int k = strlen(this->string);
-		int k1 = strlen(sstring.string);
-		if (k == k1) {
-			cout << "Строки равны";
-			system("pause");
-		}
-		else
-			if (k < k1) {
-				cout << "Строка 1 меньше строки 2";
-				system("pause");
-			}
-			else {
-				cout << "Строка 2 меньше строки 1";
-				system("pause");
-			}
-		return *this;
-		system("pause");
+	bool operator < (const StringId& sstring){
+		if (strcmp(this->string, sstring.string) < 0) 
+			return true;
+		else 
+			return false;
 	}
 };
 
@@ -241,7 +219,6 @@ public:
 	}
 
 	Complex(Complex& other) {
-		static int k = 0;
 		this->setString(other.getString());
 		this->setLength(other.getLength());
 		real = other.real;
@@ -280,22 +257,6 @@ public:
 		this->setLength(strlen(tempReal));
 		cout << this->getString() << endl;
 		return *this;
-	}
-
-	int getReal() {
-		return real;
-	}
-
-	void setReal(int treal) {
-		real = treal;
-	}
-
-	int getImage() {
-		return image;
-	}
-
-	void setImage(int timage) {
-		image = timage;
 	}
 };
 
