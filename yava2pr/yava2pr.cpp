@@ -59,14 +59,14 @@ public:
 		cout << "Сработал деструктор класса String" << endl;
 	}
 
-	String& operator= (const String& other)
+	String& operator= (const String& fstring)
 	{
 		if (this->string != nullptr)
 			delete[] string;
-		length = strlen(other.string);
+		length = strlen(fstring.string);
 		this->string = new char[length + 1];
 		for (int i = 0; i < length; i++)
-			this->string[i] = other.string[i];
+			this->string[i] = fstring.string[i];
 		this->string[length] = '\0';
 		return *this;
 	}
