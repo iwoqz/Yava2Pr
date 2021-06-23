@@ -46,7 +46,6 @@ public:
 	}
 
 	String(String& other) {
-		string = new char[sizeof other];
 		static int k = 0;
 		string = other.string;
 		length = other.length;
