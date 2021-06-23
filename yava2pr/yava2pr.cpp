@@ -47,8 +47,9 @@ public:
 
 	String(String& other) {
 		static int k = 0;
-		string = other.string;
-		length = other.length;
+		string = new char[length + 1];
+		length = strlen(other.string);
+		strcpy(string, other.string);
 		k++;
 		cout << "Сработал конструктор копирования класса String" << k << "раз сработал" << endl;
 	}
